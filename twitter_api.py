@@ -24,7 +24,6 @@ class TwitterApi:
         self.lat = 34.0522
         self.lng = -118.2437
 
-
     def get_trends(self):
         """Gets the trending search results from Twitter.
         :returns: A dictionary of trending search results.

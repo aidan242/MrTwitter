@@ -23,7 +23,6 @@ class MarkovTweet:
         for tweet in tweets:
             cleaned_tweet = ' '.join( re.sub(format_regex, " ", tweet.text).split() )
             clean_tweets.append(cleaned_tweet)
-        random.shuffle(clean_tweets)
         return clean_tweets
 
     def clean_tweets_str(self, tweets):
@@ -38,9 +37,7 @@ class MarkovTweet:
     def create_model(self,states=1):
         raw_text = " ".join(self.tweets)
         return markovify.Text(raw_text,state_size=states)
-    
-    def create_tweet_long(self):
-        return self.model.make_sentence()
 
     def create_tweet(self):
-        return self.model.make_short_sentence(self.tweet_length,tries=1000)
+        generated_tweet = self.model.make_short_sentence(self.tweet_length,tries=1000)
+        return generated_tweet

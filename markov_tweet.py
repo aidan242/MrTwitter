@@ -13,9 +13,12 @@ class MarkovTweet:
         """
         self.hashtag = hashtag
 
-        self.tweets = self.clean_tweets_str(tweets)
+        self.tweets = self.clean_tweets(tweets)
         self.tweet_length = math.floor( sum( map(len, self.tweets) ) / len(self.tweets) )
         self.model = self.create_model()
+
+        self.max_length = self.tweet_length * 2
+        self.min_length = self.tweet_length * .5
 
     def clean_tweets(self, tweets):
         clean_tweets = []
@@ -39,5 +42,5 @@ class MarkovTweet:
         return markovify.Text(raw_text,state_size=states)
 
     def create_tweet(self):
-        generated_tweet = self.model.make_short_sentence(self.tweet_length,tries=1000)
+        generated_tweet = self.model.make_short_sentence(max_chars=self.max_length, min_chars=self.min_length, tries=500)
         return generated_tweet

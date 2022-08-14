@@ -52,3 +52,9 @@ class TwitterApi:
             self.api.search_tweets,
             q = hashtag
         ).items(n) 
+
+    # Temp helped function, pull tweets from .txt files to avoid 
+    def get_archived_tweets(hashtag):
+        with open(f'data/{hashtag}.txt') as f:
+            raw_text = f.readlines()
+        return raw_text 

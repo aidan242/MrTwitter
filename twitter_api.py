@@ -52,6 +52,18 @@ class TwitterApi:
             self.api.search_tweets,
             q = hashtag
         ).items(n) 
+    
+    def send_selection_query(self,recipient):
+        """Sends a message with selection of 5 current trending hashtags
+        :param recipient: id of user to send query to
+        :returns: true if message is sent, false if error
+        """
+        trends = self.get_trends()
+        tags = self.extract_hashtags(trends)
+
+        new_list = [f'{index + 1}: {elm}' for index, elm in enumerate(tags)]
+        message = "Current hashtags:\n" + "\n".join(new_list)
+        self.api.send_direct_message(recipient, message)
 
     # Temp helped function, pull tweets from .txt files to avoid 
     def get_archived_tweets(hashtag):

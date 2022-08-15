@@ -56,7 +56,7 @@ class TwitterApi:
     def send_selection_query(self,recipient):
         """Sends a message with selection of 5 current trending hashtags
         :param recipient: id of user to send query to
-        :returns: true if message is sent, false if error
+        :returns: None
         """
         trends = self.get_trends()
         tags = self.extract_hashtags(trends)
@@ -64,6 +64,22 @@ class TwitterApi:
         new_list = [f'{index + 1}: {elm}' for index, elm in enumerate(tags)]
         message = "Current hashtags:\n" + "\n".join(new_list)
         self.api.send_direct_message(recipient, message)
+    
+    def get_last_recieved_message(self):
+        """Gets the last dm sent to current account
+        :returns: None
+        """
+        for dm in tweepy.Cursor(
+            self.api.get_direct_messages,
+            count = 1
+        ).items(1): selection = dm.message_create['message_data']['text']
+        return selection
+
+    def create_selected_tweet(self):
+        """Reads most recent message from admin, generates a tweet of sent hashtag
+        :returns: None
+        """
+        return None
 
     # Temp helped function, pull tweets from .txt files to avoid 
     def get_archived_tweets(hashtag):

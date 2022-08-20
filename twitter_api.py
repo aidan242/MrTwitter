@@ -1,4 +1,5 @@
 import tweepy
+import os
 
 """Twitter API, only used currently for getting API access, reading current trends
 and getting tweets with trending hashtags"""
@@ -53,6 +54,18 @@ class TwitterApi:
             q = hashtag
         ).items(n) 
     
+    def get_last_recieved_message(self):
+        """Gets the last dm sent to current account
+        :returns: None
+        """
+        admin_id = os.environ['ADMIN_USER_ID']
+        for dm in tweepy.Cursor(
+            self.api.get_direct_messages,
+            count = 1,
+
+        ).items(1): selection = dm.message_create['message_data']['text']
+        return selection
+    
     def send_selection_query(self,recipient):
         """Sends a message with selection of 5 current trending hashtags
         :param recipient: id of user to send query to
@@ -65,15 +78,13 @@ class TwitterApi:
         message = "Current hashtags:\n" + "\n".join(new_list)
         self.api.send_direct_message(recipient, message)
     
-    def get_last_recieved_message(self):
-        """Gets the last dm sent to current account
+    def await_new_message(self):
+        """Waits for direct message from admin selecting which tweet to generate
         :returns: None
         """
-        for dm in tweepy.Cursor(
-            self.api.get_direct_messages,
-            count = 1
-        ).items(1): selection = dm.message_create['message_data']['text']
-        return selection
+        admin_id = os.environ['ADMIN_USER_ID']
+        original_message = self.api.get_direct_messages(count=1)
+        return original_message
 
     def create_selected_tweet(self):
         """Reads most recent message from admin, generates a tweet of sent hashtag
